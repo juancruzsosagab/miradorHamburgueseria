@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mirador Hamburguesería</title>
+
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <link href="css/styles.css" rel="stylesheet" type="text/css">
+    <!-- Fuente -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!--Header-->
+
+    <header class="position-sticky top-0">
+    <nav class="navbar navbar-expand-lg navbar navbar-dark bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#">
+            <img src="./img/logo-blanco.png" alt="" width="40" height="auto" class="d-inline-block align-text-top">
+            </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#">Nosotros</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#">Instalaciones</a>
+              </li>                           
+              <li class="nav-item">
+                   <a class="nav-link active" aria-current="page" href="#">Contactanos</a>
+              </li>
+            </ul>          
+          </div>
+      </nav>
+    </header>  
+
+
+    <!--Hamburguesas-->  
+
+    <div class="container" id="titulo">
+      <h1 class="text-center" style="color: white;">
+        Hamburguesas
+      </h1>
+    </div>
+
+    <br>
+
+    <div class="container">
+      <div class="row row-cols-sm-1 row-cols-md-3 row-cols-lg-3 row-cols-xl-3">
+
+        <div class="col d-flex justify-content-center">
+          <div class="card text-center" style="width: 18rem;">
+            <img src="img/Americana.jpg" class="card-img-top" alt="...">
+              <div class="card-body">
+                <h5 class="card-title">Americana</h5>
+                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                <p class="card-text precio">$ <span class="importe">100</span></p>
+                <button class="btn btn-warning btnComprar">Agregar</button>
+            </div>
+          </div>
+        </div>
+    
+        <div class="col d-flex justify-content-center">  
+          <div class="card text-center" style="width: 18rem;">
+          <img src="img/BlueOnion.jpg" class="card-img-top" alt="...">
+            <div class="card-body">
+             <h5 class="card-title">Blue onion Burguer</h5>
+              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+              <p class="card-text precio">$ <span class="importe">100</span></p>
+              <button class="btn btn-warning btnComprar">Agregar</button>
+            </div>
+          </div> 
+        </div>  
+
+        <div class="col d-flex justify-content-center">  
+          <div class="card text-center" style="width: 18rem;">
+            <img src="img/Cheese.jpg" class="card-img-top" alt="...">
+              <div class="card-body">
+                <h5 class="card-title">Cheese Burguer</h5>
+                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                <p class="card-text precio">$ <span class="importe">100</span></p>
+                <button class="btn btn-warning btnComprar">Agregar</button>
+              </div>
+          </div>
+        </div> 
+      </div>
+    </div>
+
+    <br>
+    <br>
+
+    <!--Carrito / Form de compra-->   
+    <div class="container" id="div-compra">
+        <div class="row mt-3 carrito-form">
+            <div class="col">
+                <h2 class="d-flex justify-content-center mb-3 white-font">Realizar Compra</h2>
+                <form id="procesar-pago">
+                    <div class="form-group row">
+                        <label for="cliente" class="col-12 col-md-2 col-form-label h2 white-font">Nombre y apellido</label>
+                        <div class="col-12 col-md-10">
+                            <input type="text" class="form-control" id="cliente"
+                                placeholder="Ingresa tu nombre!"> <!--required-->
+                        </div>
+                    </div>
+
+                    <br>
+
+                    <div class="form-group row">
+                      <label for="celular" class="col-12 col-md-2 col-form-label h2 white-font">Tel. contacto</label>
+                      <div class="col-12 col-md-10">
+                          <input type="number" class="form-control" id="telefono" placeholder="Ingresá teléfono de contacto!"> <!--required-->
+                      </div>
+                    </div> 
+                    <br>                   
+                    <div class="form-group row">
+                        <label for="email" class="col-12 col-md-2 col-form-label h2 white-font">Email</label>
+                        <div class="col-12 col-md-10">
+                            <input type="email" class="form-control" id="correo" placeholder="Ingresá tu correo!"> <!--required-->
+                        </div>
+                    </div>
+
+                    <br>
+
+                    <div class="table-responsive">
+                        <table class="table table-dark table-hover" id="lista-compra">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Imagen</th>
+                                    <th scope="col">Nombre</th>
+                                    <th scope="col">Precio</th>
+                                    <th scope="col">Cantidad</th>
+                                    <th scope="col">Sub Total</th>
+                                </tr>
+
+                            </thead>
+                            <tbody id="carrito">
+
+                            </tbody>
+                            <tr>
+                                <th colspan="4" scope="col" class=""></th>
+                                <th scope="col"></th>
+                                </th>
+                            </tr>
+
+                            <tr>
+                                <th colspan="4" scope="col" class="text-right">TOTAL PAGAR:</th>
+                                <th scope="col">
+                                    <p id="total">$ <span class="total">0</span></p>
+                                </th>
+                            </tr>
+
+                        </table>
+                    </div>
+
+
+
+                    <div class="row text-center">
+                        <div class="col">
+                            <button class="btn btn-danger btn-block" id="btnVaciarCarrito">Vaciar carrito</button>
+                        </div>
+                        <div class="col">
+                            <button class="btn btn-success btn-block" id="realizarPedido">Realizar pedido</button>
+                        </div>
+                    </div>
+
+                </form>
+
+            </div>
+
+
+        </div>
+        <div class="justify-content-center text-center displaynone" id="loader">
+          <img class="rounded-circle"" src="img/loader-burguer.gif" width="auto" height="400px">
+        </div>
+    </div>    
+
+    <!--Footer-->
+    <footer>
+        <nav class="navbar navbar-expand-lg navbar navbar-dark bg-dark">
+            <div class="container-fluid">
+              <a class="navbar-brand" href="#">
+                <img src="./img/logo-naranja.png" alt="" width="40" height="auto" class="d-inline-block align-text-top">
+              </a>
+
+    </footer>
+
+    <!--Botón de Whatsapp-->
+
+    <script type="text/javascript">
+      (function () {
+          var options = {
+              whatsapp: "+54926137335", // WhatsApp number
+              call_to_action: "Envíanos un mensaje", // Call to action
+              position: "right", // Position may be 'right' or 'left'
+          };
+          var proto = document.location.protocol, host = "getbutton.io", url = proto + "//static." + host;
+          var s = document.createElement('script'); s.type = 'text/javascript'; s.async = true; s.src = url + '/widget-send-button/js/init.js';
+          s.onload = function () { WhWidgetSendButton.init(host, proto, options); };
+          var x = document.getElementsByTagName('script')[0]; x.parentNode.insertBefore(s, x);
+      })();
+    </script>
+
+    <!--Bootstrap-->
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>    
+    
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+    
+    <!--Script trabajo-->
+    <script src="./js/app.js" type="module"></script>
+
+    <!--Script dom-to-image-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.js"></script>
+
+</body>
+</html>

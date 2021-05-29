@@ -1,0 +1,25 @@
+body{
+    background-color: black;
+    font-family: 'Rubik', sans-serif;
+}
+
+header{
+    z-index: 100;
+}
+
+.displaynone{
+    display: none;
+}
+
+.white-font{
+    color: white;
+}
+#titulo{
+    padding-top: 10px;
+
+}
+
+#div-compra{
+    padding-bottom: 30px;
+}
+
