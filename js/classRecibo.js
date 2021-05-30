@@ -11,9 +11,9 @@ class reciboCliente{
 }
 
     obtenerRecibo(){
-    const pedido = document.createElement("div");
-    pedido.innerHTML = 
+    const pedido = 
    `
+   <div>
    <div class="card text-center id="para-descargar">
     <div class="card-header">
       Confirmación de pedido
@@ -30,10 +30,11 @@ class reciboCliente{
         </ol>
       </div>
       <br>
-      <button onclick="download()" class="btn btn-primary">Descargar comprobante</button>
+      <button id="btnDownload" class="btn btn-primary">Enviar comprobante por email</button>
     </div>
     <div class="card-footer text-muted">
       Nos estaremos comunicando a la brevedad para confirmar tu pedido!
+    </div>
     </div>
     </div>`
     return pedido;

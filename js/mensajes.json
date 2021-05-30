@@ -1,0 +1,21 @@
+ [
+    { 
+        "claseBackground": "bg-success",
+        "claseFont":"text-white fw-bold",
+        "titulo": "Agregada", 
+        "mensaje": "Hamburguesa agregada al carrito" 
+    },
+    {
+        "claseBackground": "bg-danger",
+        "claseFont":"fw-bold", 
+        "titulo": "opppss", 
+        "mensaje": "Esta hamburguesa ya había sido agregada al carrito"
+    },
+    {
+        "claseBackground": "bg-success",
+        "claseFont":"text-white fw-bold", 
+        "titulo": "Email enviado", 
+        "mensaje": "Enviamos el comprobante a tu email"
+    }
+]
+      

@@ -74,21 +74,20 @@ function agregarCarrito(e){
 // Agregar producto al carrito y luego al local storage (función de local storage debajo)
 
 function agregarProducto(productoAgregar){  
-    const tbodyCarrito = document.getElementById("carrito");
-    const cardCarrito = document.createElement("tr");
-    cardCarrito.innerHTML = 
-    `
-    <tr >
-    <th scope="row">Imagen</th>
-    <td>${productoAgregar.nombreProducto}</td>
-    <td>${productoAgregar.PrecioProducto}</td>
-    <td>
-    <input type="number" class="form-control" value=${productoAgregar.cantidad}>
-    </td>
-    <td>Sub Total</td>
-    </tr>
-    `;
-    tbodyCarrito.appendChild(cardCarrito);
+    $("#carrito").append(
+        `
+        <tr>
+        <th scope="row">Imagen</th>
+        <td>${productoAgregar.nombreProducto}</td>
+        <td>${productoAgregar.PrecioProducto}</td>
+        <td>
+        <input type="number" id="" class="form-control cantidad inputsClass" value=${productoAgregar.cantidad}
+        </td>
+        <td>$ ${productoAgregar.PrecioProducto}</td>
+        </tr>
+        `
+    );
+
     agregarLocalStorage(productoAgregar);
     total();
     }
@@ -138,6 +137,7 @@ function tomarDeLocalStorage(){
 function total(){
     var productos = tomarDeLocalStorage();
     let total = 0;
+
     document.getElementById("total").innerHTML = "$ " + total;
 
     for (const element of productos){
@@ -151,29 +151,29 @@ function total(){
 
 
 // Refrescando sitio y usando localStorage
-
-window.onload = function() {
+//window.onload = function()
+$(document).ready(function(){
     let productos;
     productos = tomarDeLocalStorage()
     for (const productoAgregar of productos){
-    const tbodyCarrito = document.getElementById("carrito");
-    const cardCarrito = document.createElement("tr");
-    cardCarrito.innerHTML = 
-    `
-    <tr>
-    <th scope="row">Imagen</th>
-    <td>${productoAgregar.nombreProducto}</td>
-    <td>${productoAgregar.PrecioProducto}</td>
-    <td>
-    <input type="number" class="form-control" value=${productoAgregar.cantidad}>
-    </td>
-    <td>Sub Total</td>
-    </tr>
-    `;
-    tbodyCarrito.appendChild(cardCarrito); 
-    total();   
+        $("#carrito").append(
+            `
+            <tr>
+            <th scope="row">Imagen</th>
+            <td>${productoAgregar.nombreProducto}</td>
+            <td class="precio">${productoAgregar.PrecioProducto}</td>
+            <td>
+            <input type="number" id="" class="form-control cantidad inputsClass" value=${productoAgregar.cantidad}
+            </td>
+            <td>$ ${productoAgregar.PrecioProducto}</td>
+            </tr>
+            `
+        ); 
+    total();
+  
     }
-  };
+
+  });
 
 
 //////////////////////////
@@ -201,58 +201,29 @@ function crearRecibo(e){
 
     const recibo = new reciboCliente (nombre,telefono, email, totalAPagar);
     
-    // Display none del carrito, así solo aparece el pedido
-    let carritoForm = document.querySelector('.carrito-form');
-    console.log(carritoForm)
-    carritoForm.classList.add('displaynone');
-
-    //loader
-    let loader = document.querySelector('#loader');
-    loader.classList.remove('displaynone');
-
+    // hide del carrito, y aparece el loader
+     $(".carrito-form").fadeOut("slow",function(){
+        $("#loader").fadeIn()
+     });
+     ;
+ 
     setTimeout(function(){ 
-    loader.classList.add('displaynone');    
+    $("#loader").hide()    
     //Función que crea el recibo/pedido
     const pedido = recibo.obtenerRecibo();
 
     // Agrego el recibo al sitio
-    let divCompra = document.getElementById("div-compra"); 
-    divCompra.appendChild(pedido);
-    
-    }, 5000);
+    $("#div-compra").append(pedido);
+
+    //Descargo el recibo
+    $("#btnDownload").click((e) =>{
+        e.preventDefault();
+        toastShow(mensajes[2])
+        });
+     }, 5000);
 }
 
-// Descargar comprobante
 
-/*function download() {
-
-    var node = document.getElementById('para-descargar');
-    node.style.fontFamily = "Rubik";
-    
-    domtoimage.toPng(node)
-        .then(function (dataUrl) {
-            var img = new Image();
-            img.src = dataUrl;
-            downloadURI(dataUrl, "records.png")
-        })
-        .catch(function (error) {
-            console.error('oops, something went wrong!', error);
-        });
-    
-    }
-    
-function downloadURI(uri, name) {
-    var link = document.createElement("a");
-    link.download = name;
-    link.href = uri;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    link = null;
-    }
-    */
-
-    
 // Toast function
 function toastShow(mensajes){
     $(".toast").remove();
@@ -272,15 +243,29 @@ function toastShow(mensajes){
     </div>`
 
 )
-$('.toast').toast('show');
+    $('.toast').toast('show');
 }
 
 
 // Mensajes para el toast
 
+
+$(document).ready(function(){
+    const URLJSON = "js/mensajes.json"
+    $.getJSON(URLJSON, function (respuesta, estado) {
+        if(estado === "success"){
+          let misDatos = respuesta;
+          console.log(misDatos)
+          return mensajes  
+        }
+        });
+    
+ });
+
 const mensajes = [{ 
     claseBackground: "bg-success",claseFont:"text-white fw-bold",titulo: "Agregada", mensaje: "Hamburguesa agregada al carrito" },
-{  claseBackground: "bg-danger",claseFont:"fw-bold", titulo: "opppss", mensaje: "Esta hamburguesa ya había sido agregada al carrito" }
+    {claseBackground: "bg-danger",claseFont:"fw-bold", titulo: "opppss", mensaje: "Esta hamburguesa ya había sido agregada al carrito"},
+    {claseBackground: "bg-success",claseFont:"text-white fw-bold", titulo: "Email enviado", mensaje: "Enviamos el comprobante a tu email"}
 ];
       
 
