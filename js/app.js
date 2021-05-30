@@ -215,7 +215,7 @@ function crearRecibo(e){
     // Agrego el recibo al sitio
     $("#div-compra").append(pedido);
 
-    //Descargo el recibo
+    //Confirmación de envío recibo
     $("#btnDownload").click((e) =>{
         e.preventDefault();
         toastShow(mensajes[2])
