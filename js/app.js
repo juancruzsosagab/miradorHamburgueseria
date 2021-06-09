@@ -4,6 +4,36 @@ import productoParaAgregar from "./classProducto.js";
 import reciboCliente from "./classRecibo.js";
 
 
+// Actividad de funciones clase 4
+
+let precioHamburguesa = 100;
+let cantidadHamburguesa;
+let precioTotal;
+let precioConIva;
+
+alert(`Bienvenido a tu mirador hamburguesería, nuestra hamburguesa de hoy es la americana, a $ ${precioHamburguesa} pesos`);
+
+function consultarCantidad(){
+    cantidadHamburguesa = Number(prompt("Ingresa cuantas hamburguesas del día vas a querer"));
+}
+
+function calculos(cantidadHamburguesa,precioHamburguesa){
+    precioTotal = cantidadHamburguesa * precioHamburguesa;
+    precioConIva = precioTotal * 1.21;
+    console.log(precioTotal);
+    console.log(precioConIva)
+}
+
+function mostrarAlCliente(precioTotal,PrecioConIva){
+    alert("El precio de tu hamburguesa sin impuestos es $ " + precioTotal + ", y con IVA incluído es $ " + PrecioConIva )
+}
+
+consultarCantidad();
+calculos(cantidadHamburguesa,precioHamburguesa);
+mostrarAlCliente(precioTotal,precioConIva);
+
+
+
 
 //////////////////////////
 
@@ -53,7 +83,7 @@ function agregarCarrito(e){
     const producto = botonClickeado.closest('.card');
     const productoNombre = producto.querySelector('.card-title').textContent;
     const productoPrecio = parseInt(producto.querySelector('.precio span').textContent);
-    const cantidad = 1;
+    const cantidad = parseInt(producto.querySelector('.cantidad').value);
     let productoAgregar = new productoParaAgregar(productoNombre,productoPrecio,cantidad)
     
 // For para chequear si el elmento ya está en el carrito
@@ -81,9 +111,9 @@ function agregarProducto(productoAgregar){
         <td>${productoAgregar.nombreProducto}</td>
         <td>${productoAgregar.PrecioProducto}</td>
         <td>
-        <input type="number" id="" class="form-control cantidad inputsClass" value=${productoAgregar.cantidad}
+        ${productoAgregar.cantidad}
         </td>
-        <td>$ ${productoAgregar.PrecioProducto}</td>
+        <td>$ ${productoAgregar.PrecioProducto*productoAgregar.cantidad}</td>
         </tr>
         `
     );
@@ -161,11 +191,11 @@ $(document).ready(function(){
             <tr>
             <th scope="row">Imagen</th>
             <td>${productoAgregar.nombreProducto}</td>
-            <td class="precio">${productoAgregar.PrecioProducto}</td>
+            <td>${productoAgregar.PrecioProducto}</td>
             <td>
-            <input type="number" id="" class="form-control cantidad inputsClass" value=${productoAgregar.cantidad}
+            ${productoAgregar.cantidad}
             </td>
-            <td>$ ${productoAgregar.PrecioProducto}</td>
+            <td>$ ${productoAgregar.PrecioProducto*productoAgregar.cantidad}</td>
             </tr>
             `
         ); 
@@ -250,17 +280,18 @@ function toastShow(mensajes){
 // Mensajes para el toast
 
 
-$(document).ready(function(){
-    const URLJSON = "js/mensajes.json"
-    $.getJSON(URLJSON, function (respuesta, estado) {
+
+   const URLJSON = "js/mensajes.json"
+   const misDatos =  $.getJSON(URLJSON, function (respuesta, estado) {
         if(estado === "success"){
           let misDatos = respuesta;
           console.log(misDatos)
-          return mensajes  
+          return misDatos  
         }
         });
     
- });
+
+
 
 const mensajes = [{ 
     claseBackground: "bg-success",claseFont:"text-white fw-bold",titulo: "Agregada", mensaje: "Hamburguesa agregada al carrito" },
