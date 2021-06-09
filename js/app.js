@@ -25,7 +25,7 @@ function calculos(cantidadHamburguesa,precioHamburguesa){
 }
 
 function mostrarAlCliente(precioTotal,PrecioConIva){
-    alert("El precio de tu hamburguesa sin impuestos es $ " + precioTotal + ", y con IVA incluído es $ " + PrecioConIva )
+    alert("El precio que vas a pagar sin impuestos es $ " + precioTotal + ", y con IVA incluído es $ " + PrecioConIva )
 }
 
 consultarCantidad();
