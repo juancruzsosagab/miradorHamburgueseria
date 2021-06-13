@@ -190,7 +190,7 @@ function crearRecibo(e){
     let hamburguesas = tomarDeLocalStorage()
     let hamburguesasParaNombre = hamburguesas.map(hamburguesas=>{return hamburguesas.nombreProducto})
     let nombreHamburguesas = hamburguesasParaNombre.join(", ")
-    console.log(nombreHamburguesas);
+
     //Tomando datos del form
     const nombre = document.getElementById("cliente").value;
     const telefono = document.getElementById("telefono").value;
@@ -251,10 +251,10 @@ function toastShow(mensajes){
 
 
    const URLJSON = "js/mensajes.json"
-   const misDatos =  $.getJSON(URLJSON, function (respuesta, estado) {
+   const misDatoss =  $.getJSON(URLJSON, function (respuesta, estado) {
         if(estado === "success"){
           let misDatos = respuesta;
-          console.log(misDatos)
+          /*console.log(misDatos)*/
           return misDatos  
         }
         });
