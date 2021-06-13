@@ -1,10 +1,11 @@
 export default 
 
 class reciboCliente{
-    constructor(nombre,telefono, email, totalAPagar){
+    constructor(nombre,telefono, email, totalAPagar, nombreHamburguesas){
     this.nombre = nombre;
     this.telefono = telefono; 
     this.email = email;
+    this.hamburguesas = nombreHamburguesas;
     this.importeTotal = totalAPagar;
     this.neto = ((parseInt(this.importeTotal))/1.21).toFixed(2) ;
     this.iva = (parseInt(this.importeTotal)-this.neto).toFixed(2);
@@ -24,6 +25,7 @@ class reciboCliente{
       <ol class="list-group">
         <li class="list-group-item">Cliente: ${this.nombre}</li>
         <li class="list-group-item">Teléfono: ${this.telefono}</li>
+        <li class="list-group-item">Hamburguesas seleccionadas: ${this.hamburguesas}</li>
         <li class="list-group-item">Importe Neto: $ ${this.neto}</li>
         <li class="list-group-item">IVA: $ ${this.iva}</li>
         <li class="list-group-item">Total a pagar: $ ${this.importeTotal}</li>

@@ -4,37 +4,6 @@ import productoParaAgregar from "./classProducto.js";
 import reciboCliente from "./classRecibo.js";
 
 
-// Actividad de funciones clase 4
-
-let precioHamburguesa = 100;
-let cantidadHamburguesa;
-let precioTotal;
-let precioConIva;
-
-alert(`Bienvenido a tu mirador hamburguesería, nuestra hamburguesa de hoy es la americana, a $ ${precioHamburguesa} pesos`);
-
-function consultarCantidad(){
-    cantidadHamburguesa = Number(prompt("Ingresa cuantas hamburguesas del día vas a querer"));
-}
-
-function calculos(cantidadHamburguesa,precioHamburguesa){
-    precioTotal = cantidadHamburguesa * precioHamburguesa;
-    precioConIva = precioTotal * 1.21;
-    console.log(precioTotal);
-    console.log(precioConIva)
-}
-
-function mostrarAlCliente(precioTotal,PrecioConIva){
-    alert("El precio que vas a pagar sin impuestos es $ " + precioTotal + ", y con IVA incluído es $ " + PrecioConIva )
-}
-
-consultarCantidad();
-calculos(cantidadHamburguesa,precioHamburguesa);
-mostrarAlCliente(precioTotal,precioConIva);
-
-
-
-
 //////////////////////////
 
 //Capturando clicks y agregando funciones a los eventos//
@@ -86,16 +55,15 @@ function agregarCarrito(e){
     const cantidad = parseInt(producto.querySelector('.cantidad').value);
     let productoAgregar = new productoParaAgregar(productoNombre,productoPrecio,cantidad)
     
-// For para chequear si el elmento ya está en el carrito
-    let chequeoCarrito = tomarDeLocalStorage();
-    for (let i = 0; i < chequeoCarrito.length; i++) {
-        if(chequeoCarrito[i].nombreProducto===productoAgregar.nombreProducto){ 
-            toastShow(mensajes[1]);
-            return null;
-        }
-        
+// Find para chequear si la hamburguesa está en el carrito
+    let carritoParaCheck = tomarDeLocalStorage();
+    let chequeoCarrito = carritoParaCheck.find(carritoParaCheck=>carritoParaCheck.nombreProducto === productoAgregar.nombreProducto);
+    if(chequeoCarrito){
+        toastShow(mensajes[1]);
+        return null;
     }
     
+   
     agregarProducto(productoAgregar);
     toastShow(mensajes[0]);
 }
@@ -185,7 +153,7 @@ function total(){
 $(document).ready(function(){
     let productos;
     productos = tomarDeLocalStorage()
-    for (const productoAgregar of productos){
+    productos.map (productoAgregar=>
         $("#carrito").append(
             `
             <tr>
@@ -198,11 +166,8 @@ $(document).ready(function(){
             <td>$ ${productoAgregar.PrecioProducto*productoAgregar.cantidad}</td>
             </tr>
             `
-        ); 
-    total();
-  
-    }
-
+        ));
+    total()       
   });
 
 
@@ -221,7 +186,11 @@ function crearRecibo(e){
     let totalAPagar = document.getElementById("total").textContent;
     totalAPagar = totalAPagar.replace("$","");
     
-    
+    //Tomando nombres de hamburguesas compradas
+    let hamburguesas = tomarDeLocalStorage()
+    let hamburguesasParaNombre = hamburguesas.map(hamburguesas=>{return hamburguesas.nombreProducto})
+    let nombreHamburguesas = hamburguesasParaNombre.join(", ")
+    console.log(nombreHamburguesas);
     //Tomando datos del form
     const nombre = document.getElementById("cliente").value;
     const telefono = document.getElementById("telefono").value;
@@ -229,7 +198,7 @@ function crearRecibo(e){
     
     //Creando objeto en la clase recibo
 
-    const recibo = new reciboCliente (nombre,telefono, email, totalAPagar);
+    const recibo = new reciboCliente (nombre,telefono, email, totalAPagar, nombreHamburguesas);
     
     // hide del carrito, y aparece el loader
      $(".carrito-form").fadeOut("slow",function(){
