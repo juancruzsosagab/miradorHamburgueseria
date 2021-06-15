@@ -3,6 +3,32 @@
 import productoParaAgregar from "./classProducto.js";
 import reciboCliente from "./classRecibo.js";
 
+// Simular alert e input
+
+let precioHamburguesa = 100;
+let cantidadHamburguesa;
+let precioTotal;
+let precioConIva;
+
+alert(`Bienvenido a tu mirador hamburguesería, nuestra hamburguesa de hoy es la americana, a $ ${precioHamburguesa} pesos`);
+
+function consultarCantidad(){
+    cantidadHamburguesa = Number(prompt("Ingresa cuantas hamburguesas del día vas a querer"));
+}
+
+function calculos(cantidadHamburguesa,precioHamburguesa){
+    precioTotal = cantidadHamburguesa * precioHamburguesa;
+    precioConIva = precioTotal * 1.21;
+}
+
+function mostrarAlCliente(precioTotal,PrecioConIva){
+    alert("El precio que vas a pagar sin impuestos es $ " + precioTotal + ", y con IVA incluído es $ " + PrecioConIva )
+}
+
+consultarCantidad();
+calculos(cantidadHamburguesa,precioHamburguesa);
+mostrarAlCliente(precioTotal,precioConIva);
+
 
 //////////////////////////
 
@@ -63,7 +89,6 @@ function agregarCarrito(e){
         return null;
     }
     
-   
     agregarProducto(productoAgregar);
     toastShow(mensajes[0]);
 }
@@ -148,29 +173,6 @@ function total(){
 }
 
 
-// Refrescando sitio y usando localStorage
-//window.onload = function()
-$(document).ready(function(){
-    let productos;
-    productos = tomarDeLocalStorage()
-    productos.map (productoAgregar=>
-        $("#carrito").append(
-            `
-            <tr>
-            <th scope="row">Imagen</th>
-            <td>${productoAgregar.nombreProducto}</td>
-            <td>${productoAgregar.PrecioProducto}</td>
-            <td>
-            ${productoAgregar.cantidad}
-            </td>
-            <td>$ ${productoAgregar.PrecioProducto*productoAgregar.cantidad}</td>
-            </tr>
-            `
-        ));
-    total()       
-  });
-
-
 //////////////////////////
 
 //Creando pedido/recibo del cliente. Utilizo la clase "classRecibo"//
@@ -182,20 +184,20 @@ $(document).ready(function(){
 function crearRecibo(e){
     e.preventDefault();
 
-    //Tomando el total desde el formulario
-    let totalAPagar = document.getElementById("total").textContent;
-    totalAPagar = totalAPagar.replace("$","");
-    
+    //Tomando datos del form
+    const nombre = document.getElementById("cliente").value;
+    const telefono = document.getElementById("telefono").value;
+    const email = document.getElementById("correo").value;
+
+  
     //Tomando nombres de hamburguesas compradas
     let hamburguesas = tomarDeLocalStorage()
     let hamburguesasParaNombre = hamburguesas.map(hamburguesas=>{return hamburguesas.nombreProducto})
     let nombreHamburguesas = hamburguesasParaNombre.join(", ")
 
-    //Tomando datos del form
-    const nombre = document.getElementById("cliente").value;
-    const telefono = document.getElementById("telefono").value;
-    const email = document.getElementById("correo").value;
-    
+    //Tomando el total desde el formulario
+    let totalAPagar = document.getElementById("total").textContent.replace("$","");;
+      
     //Creando objeto en la clase recibo
 
     const recibo = new reciboCliente (nombre,telefono, email, totalAPagar, nombreHamburguesas);
@@ -246,9 +248,7 @@ function toastShow(mensajes){
 }
 
 
-// Mensajes para el toast
-
-
+// Mensajes para el toast, la idea es luego importar estos datos, esto está en proceso 
 
    const URLJSON = "js/mensajes.json"
    const misDatoss =  $.getJSON(URLJSON, function (respuesta, estado) {
@@ -270,6 +270,26 @@ const mensajes = [{
       
 
 
-
+// Refrescando sitio y usando localStorage
+//window.onload = function()
+$(document).ready(function(){
+    let productos;
+    productos = tomarDeLocalStorage()
+    productos.map (productoAgregar=>
+        $("#carrito").append(
+            `
+            <tr>
+            <th scope="row">Imagen</th>
+            <td>${productoAgregar.nombreProducto}</td>
+            <td>${productoAgregar.PrecioProducto}</td>
+            <td>
+            ${productoAgregar.cantidad}
+            </td>
+            <td>$ ${productoAgregar.PrecioProducto*productoAgregar.cantidad}</td>
+            </tr>
+            `
+        ));
+    total()       
+  });
 
 
