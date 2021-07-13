@@ -3,33 +3,6 @@
 import productoParaAgregar from "./classProducto.js";
 import reciboCliente from "./classRecibo.js";
 
-// Simular alert e input
-
-let precioHamburguesa = 100;
-let cantidadHamburguesa;
-let precioTotal;
-let precioConIva;
-
-alert(`Bienvenido a tu mirador hamburguesería, nuestra hamburguesa de hoy es la americana, a $ ${precioHamburguesa} pesos`);
-
-function consultarCantidad(){
-    cantidadHamburguesa = Number(prompt("Ingresa cuantas hamburguesas del día vas a querer"));
-}
-
-function calculos(cantidadHamburguesa,precioHamburguesa){
-    precioTotal = cantidadHamburguesa * precioHamburguesa;
-    precioConIva = precioTotal * 1.21;
-}
-
-function mostrarAlCliente(precioTotal,PrecioConIva){
-    alert("El precio que vas a pagar sin impuestos es $ " + precioTotal + ", y con IVA incluído es $ " + PrecioConIva )
-}
-
-consultarCantidad();
-calculos(cantidadHamburguesa,precioHamburguesa);
-mostrarAlCliente(precioTotal,precioConIva);
-
-
 //////////////////////////
 
 //Capturando clicks y agregando funciones a los eventos//
@@ -76,14 +49,17 @@ btnRealizarPedido.addEventListener("click", crearRecibo);
 function agregarCarrito(e){
     const botonClickeado = e.target;
     const producto = botonClickeado.closest('.card');
+    //const productoId = 
     const productoNombre = producto.querySelector('.card-title').textContent;
     const productoPrecio = parseInt(producto.querySelector('.precio span').textContent);
     const cantidad = parseInt(producto.querySelector('.cantidad').value);
     let productoAgregar = new productoParaAgregar(productoNombre,productoPrecio,cantidad)
+
+    console.log(productoId);
     
 // Find para chequear si la hamburguesa está en el carrito
-    let carritoParaCheck = tomarDeLocalStorage();
-    let chequeoCarrito = carritoParaCheck.find(carritoParaCheck=>carritoParaCheck.nombreProducto === productoAgregar.nombreProducto);
+    const carritoParaCheck = tomarDeLocalStorage();
+    const chequeoCarrito = carritoParaCheck.find(carritoParaCheck=>carritoParaCheck.nombreProducto === productoAgregar.nombreProducto);
     if(chequeoCarrito){
         toastShow(mensajes[1]);
         return null;
@@ -158,7 +134,7 @@ function tomarDeLocalStorage(){
 //Función para calcular el total, está función la use también en las funciones agregarProducto,EliminarProductos,window.onload
 
 function total(){
-    var productos = tomarDeLocalStorage();
+    const productos = tomarDeLocalStorage();
     let total = 0;
 
     document.getElementById("total").innerHTML = "$ " + total;
@@ -172,6 +148,13 @@ function total(){
    }
 }
 
+// Función para eliminar un producto
+
+function borrarProducto(e, producto){
+    productosLocal = tomarDeLocalStorage();
+    
+
+}
 
 //////////////////////////
 
@@ -191,12 +174,12 @@ function crearRecibo(e){
 
   
     //Tomando nombres de hamburguesas compradas
-    let hamburguesas = tomarDeLocalStorage()
-    let hamburguesasParaNombre = hamburguesas.map(hamburguesas=>{return hamburguesas.nombreProducto})
-    let nombreHamburguesas = hamburguesasParaNombre.join(", ")
+    const hamburguesas = tomarDeLocalStorage()
+    const hamburguesasParaNombre = hamburguesas.map(hamburguesas=>{return hamburguesas.nombreProducto})
+    const nombreHamburguesas = hamburguesasParaNombre.join(", ")
 
     //Tomando el total desde el formulario
-    let totalAPagar = document.getElementById("total").textContent.replace("$","");;
+    const totalAPagar = document.getElementById("total").textContent.replace("$","");;
       
     //Creando objeto en la clase recibo
 
@@ -292,4 +275,10 @@ $(document).ready(function(){
     total()       
   });
 
+$(".card").animate({margin: "+=50px"},5000)
+          .animate({margin: "-=50px"},5000);
 
+$(".logo-hamb").animate({height: "+=20px"},1000, function(){
+   $(".logo-hamb").delay(5000)
+                .animate({height:"-=20px"},5000)   
+})
