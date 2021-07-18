@@ -33,6 +33,14 @@ const btnRealizarPedido = document.getElementById("realizarPedido");
 // Evento en el botón Realizar pedido
 btnRealizarPedido.addEventListener("click", crearRecibo);
 
+// Tomando Evento click del botón realizar pedido
+const btnBorrarProducto = document.getElementById("div-compra");
+
+// Evento en el botón Realizar pedido
+
+btnBorrarProducto.addEventListener("click",borrarProducto);
+
+
 
 
 
@@ -49,13 +57,13 @@ btnRealizarPedido.addEventListener("click", crearRecibo);
 function agregarCarrito(e){
     const botonClickeado = e.target;
     const producto = botonClickeado.closest('.card');
-    //const productoId = 
     const productoNombre = producto.querySelector('.card-title').textContent;
     const productoPrecio = parseInt(producto.querySelector('.precio span').textContent);
+    const productoId = producto.querySelector('button').getAttribute('data-id');
     const cantidad = parseInt(producto.querySelector('.cantidad').value);
-    let productoAgregar = new productoParaAgregar(productoNombre,productoPrecio,cantidad)
+    let productoAgregar = new productoParaAgregar(productoNombre,productoPrecio,productoId,cantidad)
 
-    console.log(productoId);
+    console.log(productoAgregar);
     
 // Find para chequear si la hamburguesa está en el carrito
     const carritoParaCheck = tomarDeLocalStorage();
@@ -73,10 +81,11 @@ function agregarCarrito(e){
 // Agregar producto al carrito y luego al local storage (función de local storage debajo)
 
 function agregarProducto(productoAgregar){  
+    console.log(productoAgregar.ProductoId);
     $("#carrito").append(
         `
         <tr>
-        <th scope="row">Imagen</th>
+        <th scope="row"><a href="#" class="borrarProducto" data-id="${productoAgregar.ProductoId}">Borrar</a></th>
         <td>${productoAgregar.nombreProducto}</td>
         <td>${productoAgregar.PrecioProducto}</td>
         <td>
@@ -108,7 +117,13 @@ function eliminarProductos(e){
 }
 
 
-// Set local storage
+//Actualizar local storage
+
+function actualizarStorage(carrito) {
+	localStorage.setItem('carrito', JSON.stringify(carrito));
+}
+
+// Agregar local storage
 
 function agregarLocalStorage(productoAgregar){
     let carrito;
@@ -150,8 +165,18 @@ function total(){
 
 // Función para eliminar un producto
 
-function borrarProducto(e, producto){
-    productosLocal = tomarDeLocalStorage();
+function borrarProducto(e){
+    if (e.target.classList.contains("borrarProducto")){
+        let carrito = [];
+        const productoABorrar = e.target.parentElement.parentElement;
+        const productoId = e.target.getAttribute('data-id');
+        productoABorrar.remove()
+
+        let carritoStorage = tomarDeLocalStorage();
+        carrito = carritoStorage.filter(producto => producto.ProductoId !== productoId);
+        actualizarStorage(carrito)
+    }
+
     
 
 }
@@ -262,7 +287,7 @@ $(document).ready(function(){
         $("#carrito").append(
             `
             <tr>
-            <th scope="row">Imagen</th>
+            <th scope="row"><a href="#" class="borrarProducto" data-id="${productoAgregar.ProductoId}">Borrar</a></th>
             <td>${productoAgregar.nombreProducto}</td>
             <td>${productoAgregar.PrecioProducto}</td>
             <td>
@@ -270,8 +295,7 @@ $(document).ready(function(){
             </td>
             <td>$ ${productoAgregar.PrecioProducto*productoAgregar.cantidad}</td>
             </tr>
-            `
-        ));
+            `         ));
     total()       
   });
 
