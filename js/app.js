@@ -3,45 +3,53 @@
 import productoParaAgregar from "./classProducto.js";
 import reciboCliente from "./classRecibo.js";
 
-//////////////////////////
-
-//Capturando clicks y agregando funciones a los eventos//
 
 //////////////////////////
+// Selectores //
 
+//////////////////////////
 
-
-// Tomando Evento click de los botones Agregar 
+// Tomando clases para agregar producto
 const btnagregarClick = document.getElementsByClassName("btnComprar");
 
-// Evento en el botón de Agregar
+// Tomando id click del botón vaciar carrito 
+const btnVaciarCarrito = document.getElementById("btnVaciarCarrito");
+
+// Tomando id del botón realizar pedido
+const btnRealizarPedido = document.getElementById("realizarPedido");
+
+// Tomando id para luego borrar producto del botón realizar pedido
+const btnBorrarProducto = document.getElementById("div-compra");
+
+// Tomando id del carrito
+const tbodyCarrito = document.getElementById("carrito");
+
+
+//Declaración de variables globales//
+
+let transaccion;
+
+
+//////////////////////////
+
+//Listeners//
+
+//////////////////////////
+
+// Eventos en el botón de Agregar
 for (const button of btnagregarClick){
     button.addEventListener("click", agregarCarrito);
 }
 
-
-// Tomando Evento click del botón vaciar carrito 
-const btnVaciarCarrito = document.getElementById("btnVaciarCarrito");
-
 // Evento en el botón Vaciar carrito
 btnVaciarCarrito.addEventListener("click", eliminarProductos);
-  
-
-// Tomando Evento click del botón realizar pedido
-const btnRealizarPedido = document.getElementById("realizarPedido");
-
+ 
 // Evento en el botón Realizar pedido
 btnRealizarPedido.addEventListener("click", crearRecibo);
 
-// Tomando Evento click del botón realizar pedido
-const btnBorrarProducto = document.getElementById("div-compra");
-
-// Evento en el botón Realizar pedido
+// Eventos para borrar producto del carro
 
 btnBorrarProducto.addEventListener("click",borrarProducto);
-
-
-
 
 
 //////////////////////////
@@ -49,7 +57,6 @@ btnBorrarProducto.addEventListener("click",borrarProducto);
 //Funciones carrito//
 
 //////////////////////////
-
 
 
 //Armado de carrito para tomar elementos y agregar al carrito
@@ -60,19 +67,26 @@ function agregarCarrito(e){
     const productoNombre = producto.querySelector('.card-title').textContent;
     const productoPrecio = parseInt(producto.querySelector('.precio span').textContent);
     const productoId = producto.querySelector('button').getAttribute('data-id');
-    const cantidad = parseInt(producto.querySelector('.cantidad').value);
+    const cantidad = 1;/*parseInt(producto.querySelector('.cantidad').value);*/
     let productoAgregar = new productoParaAgregar(productoNombre,productoPrecio,productoId,cantidad)
-
-    console.log(productoAgregar);
     
-// Find para chequear si la hamburguesa está en el carrito
+    
+// Find para chequear si la hamburguesa está en el carrito y agregar una hamburguesa más al clickear
     const carritoParaCheck = tomarDeLocalStorage();
     const chequeoCarrito = carritoParaCheck.find(carritoParaCheck=>carritoParaCheck.nombreProducto === productoAgregar.nombreProducto);
     if(chequeoCarrito){
+        const nuevoCarrito = carritoParaCheck.map(producto=>{
+            if (productoId === producto.ProductoId){
+                producto.cantidad++;
+            }
+            return producto;
+            })
+        
+        actualizarStorage(nuevoCarrito);
+        renderCarrito();
         toastShow(mensajes[1]);
         return null;
     }
-    
     agregarProducto(productoAgregar);
     toastShow(mensajes[0]);
 }
@@ -81,11 +95,10 @@ function agregarCarrito(e){
 // Agregar producto al carrito y luego al local storage (función de local storage debajo)
 
 function agregarProducto(productoAgregar){  
-    console.log(productoAgregar.ProductoId);
     $("#carrito").append(
         `
         <tr>
-        <th scope="row"><a href="#" class="borrarProducto" data-id="${productoAgregar.ProductoId}">Borrar</a></th>
+        <th scope="row"><a href="#" class="borrarProducto" data-id="${productoAgregar.ProductoId}">Quitar</a></th>
         <td>${productoAgregar.nombreProducto}</td>
         <td>${productoAgregar.PrecioProducto}</td>
         <td>
@@ -101,52 +114,30 @@ function agregarProducto(productoAgregar){
     }
 
 
-// Vaciar carrito
+//Render carrito
 
-function eliminarProductos(e){
-    e.preventDefault();
-    const tbodyCarrito = document.getElementById("carrito");
-    
-    while(tbodyCarrito.firstChild){
-        tbodyCarrito.removeChild(tbodyCarrito.firstChild)
-    }
-
-    localStorage.clear();
-    total();
-    return false;
-}
-
-
-//Actualizar local storage
-
-function actualizarStorage(carrito) {
-	localStorage.setItem('carrito', JSON.stringify(carrito));
-}
-
-// Agregar local storage
-
-function agregarLocalStorage(productoAgregar){
-    let carrito;
-    carrito = tomarDeLocalStorage();
-    carrito.push(productoAgregar)
-    localStorage.setItem("carrito", JSON.stringify(carrito))
-}
-
-
-// Get local storage y mostrar items de carrito´
-
-function tomarDeLocalStorage(){
+function renderCarrito(){
     let productos;
-    if(localStorage.getItem("carrito") === null){
-        productos = []
-    }else{
-        productos =  JSON.parse(localStorage.getItem("carrito"));
-    }
-    return productos;
-}   
+    tbodyCarrito.innerHTML = '';
+    productos = tomarDeLocalStorage()
+    productos.map (productoAgregar=>
+        $("#carrito").append(
+            `
+            <tr>
+            <th scope="row"><a href="#" class="borrarProducto" data-id="${productoAgregar.ProductoId}">Quitar</a></th>
+            <td>${productoAgregar.nombreProducto}</td>
+            <td>${productoAgregar.PrecioProducto}</td>
+            <td>
+            ${productoAgregar.cantidad}
+            </td>
+            <td>$ ${productoAgregar.PrecioProducto*productoAgregar.cantidad}</td>
+            </tr>
+            `         ));
+    total()       
+  };
 
 
-//Función para calcular el total, está función la use también en las funciones agregarProducto,EliminarProductos,window.onload
+//Función para calcular el total, está función la use también en las funciones agregarProducto,EliminarProductos,render carrito
 
 function total(){
     const productos = tomarDeLocalStorage();
@@ -161,13 +152,15 @@ function total(){
         document.getElementById("total").innerHTML = "$" + total;
  
    }
-}
+}  
+
 
 // Función para eliminar un producto
 
 function borrarProducto(e){
+    e.preventDefault();
+    let carrito = [];
     if (e.target.classList.contains("borrarProducto")){
-        let carrito = [];
         const productoABorrar = e.target.parentElement.parentElement;
         const productoId = e.target.getAttribute('data-id');
         productoABorrar.remove()
@@ -176,17 +169,68 @@ function borrarProducto(e){
         carrito = carritoStorage.filter(producto => producto.ProductoId !== productoId);
         actualizarStorage(carrito)
     }
-
-    
-
 }
+
+
+// función para eliminar todos los productos del carrito
+
+function eliminarProductos(e){
+    e.preventDefault();
+       
+    while(tbodyCarrito.firstChild){
+        tbodyCarrito.removeChild(tbodyCarrito.firstChild)
+    }
+
+    localStorage.clear();
+    total();
+    return false;
+}
+
+
+
+//////////////////////////
+
+//Funciones para interactuar con local storage//
+
+//////////////////////////
+
+
+//Actualizar local storage
+
+function actualizarStorage(carrito) {
+    localStorage.clear();
+	localStorage.setItem('carrito', JSON.stringify(carrito));
+}
+
+
+// Agregar local storage
+
+function agregarLocalStorage(productoAgregar){
+    let carrito;
+    carrito = tomarDeLocalStorage();
+    carrito.push(productoAgregar)
+    localStorage.setItem("carrito", JSON.stringify(carrito))
+}
+
+
+//  Tomar productos de local storage
+
+function tomarDeLocalStorage(){
+    let productos;
+    if(localStorage.getItem("carrito") === null){
+        productos = []
+    }else{
+        productos =  JSON.parse(localStorage.getItem("carrito"));
+    }
+    return productos;
+}   
+
 
 //////////////////////////
 
 //Creando pedido/recibo del cliente. Utilizo la clase "classRecibo"//
 
 //////////////////////////
-
 
 
 function crearRecibo(e){
@@ -206,21 +250,26 @@ function crearRecibo(e){
     //Tomando el total desde el formulario
     const totalAPagar = document.getElementById("total").textContent.replace("$","");;
       
-    //Creando objeto en la clase recibo
 
-    const recibo = new reciboCliente (nombre,telefono, email, totalAPagar, nombreHamburguesas);
-    
     // hide del carrito, y aparece el loader
      $(".carrito-form").fadeOut("slow",function(){
         $("#loader").fadeIn()
      });
      ;
  
+    // llamado a ajax
+    llamadoAjax();
+
     setTimeout(function(){ 
+
+    //Creando objeto en la clase recibo
+
+    const recibo = new reciboCliente (nombre,telefono, email, totalAPagar, nombreHamburguesas,transaccion);
+            
     $("#loader").hide()    
     //Función que crea el recibo/pedido
     const pedido = recibo.obtenerRecibo();
-
+   
     // Agrego el recibo al sitio
     $("#div-compra").append(pedido);
 
@@ -229,11 +278,27 @@ function crearRecibo(e){
         e.preventDefault();
         toastShow(mensajes[2])
         });
+
+    $("#btnBuyAgain").click((e) =>{
+        e.preventDefault();
+        $(".recibo").fadeOut();
+        $(".carrito-form").fadeIn();
+        eliminarProductos(e);
+        renderCarrito();
+        });        
+       
      }, 5000);
 }
 
 
-// Toast function
+//////////////////////////
+
+//Toasts//
+
+//////////////////////////
+
+
+// Toast function utilizada en todo el documento
 function toastShow(mensajes){
     $(".toast").remove();
     $("body").prepend(`
@@ -255,54 +320,57 @@ function toastShow(mensajes){
     $('.toast').toast('show');
 }
 
-
-// Mensajes para el toast, la idea es luego importar estos datos, esto está en proceso 
-
-   const URLJSON = "js/mensajes.json"
-   const misDatoss =  $.getJSON(URLJSON, function (respuesta, estado) {
-        if(estado === "success"){
-          let misDatos = respuesta;
-          /*console.log(misDatos)*/
-          return misDatos  
-        }
-        });
-    
-
-
+// Mensajes y clases para los toast
 
 const mensajes = [{ 
     claseBackground: "bg-success",claseFont:"text-white fw-bold",titulo: "Agregada", mensaje: "Hamburguesa agregada al carrito" },
-    {claseBackground: "bg-danger",claseFont:"fw-bold", titulo: "opppss", mensaje: "Esta hamburguesa ya había sido agregada al carrito"},
+    {claseBackground: "bg-success",claseFont:"text-white fw-bold", titulo: "Otra más!", mensaje: "Agregaste una hamburguesa más al carrito"},
     {claseBackground: "bg-success",claseFont:"text-white fw-bold", titulo: "Email enviado", mensaje: "Enviamos el comprobante a tu email"}
 ];
       
 
+//////////////////////////
 
-// Refrescando sitio y usando localStorage
-//window.onload = function()
-$(document).ready(function(){
-    let productos;
-    productos = tomarDeLocalStorage()
-    productos.map (productoAgregar=>
-        $("#carrito").append(
-            `
-            <tr>
-            <th scope="row"><a href="#" class="borrarProducto" data-id="${productoAgregar.ProductoId}">Borrar</a></th>
-            <td>${productoAgregar.nombreProducto}</td>
-            <td>${productoAgregar.PrecioProducto}</td>
-            <td>
-            ${productoAgregar.cantidad}
-            </td>
-            <td>$ ${productoAgregar.PrecioProducto*productoAgregar.cantidad}</td>
-            </tr>
-            `         ));
-    total()       
-  });
+//Funciones que se ejecutan al actualizar el sitio//
 
-$(".card").animate({margin: "+=50px"},5000)
+//////////////////////////
+
+
+$(document).ready(renderCarrito());
+
+
+//////////////////////////
+
+//Llamado a ajax//
+
+//////////////////////////
+
+
+function llamadoAjax() {
+    $.ajax({
+	url: "js/txt.txt",
+ 	method: "GET",
+ 	dataType: "text",
+	success: function (result, status, jqXHR) {
+        transaccion = result
+    },
+    error: function (jqXHR, status, error) {
+        transaccion = "Error"    
+	}
+}) 
+
+
+};
+
+
+
+
+//Animaciones
+/*$(".card").animate({margin: "+=50px"},5000)
           .animate({margin: "-=50px"},5000);
 
 $(".logo-hamb").animate({height: "+=20px"},1000, function(){
    $(".logo-hamb").delay(5000)
                 .animate({height:"-=20px"},5000)   
-})
+})*/
+
